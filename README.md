@@ -1,21 +1,35 @@
 # Wei-Lun Hsu
 
-I focus on reproducible RTL verification and circuit simulation. I aim to make source versions, controls, evidence, and limitations as easy to inspect as the results.
+**Computer architecture / RTL verification / Reproducible hardware experiments**
 
-## Selected public work
+I focus on how hardware behavior becomes observable evidence: from instruction-fetch signals to architectural traps, and from comparator waveforms to deadline-qualified decisions. My public projects connect a precise question to source-pinned experiments, explicit controls, raw observations, and replay instructions.
+
+[Research evidence index](RESEARCH.md): inspect the implementation, follow the recorded results, or choose a replay entrypoint.
+
+## Selected research artifacts
 
 ### [Ibex instruction-fetch error observability](https://github.com/WLHsu0827/ibex-fetch-error-observability)
 
-An Apache-2.0 directed RTL pilot pinned to [an Ibex commit](https://github.com/lowRISC/ibex/commit/7cd891ef267e8db36813b29cb8851142ab2636d5). Three full-core cases (one run per case in each recording) use RVFI trap/retirement and CSR checks as architectural truth: a warm speculative bus error does not trap, while a cold demanded miss does. [Reproduction guide](https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/main/REPRODUCE.md) · [Verification record](https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/main/VERIFICATION.md).
+**Question:** When does an instruction-bus error become an architectural instruction-fetch fault?
 
-This examines a [previously discussed mechanism](https://github.com/lowRISC/ibex/issues/1451), not a new bug. The recorded executions used two isolated checkouts on the same WSL host, not separate-host or human replication; compared events match, but whole-core binary hashes and JSON bytes differ.
+**Contribution:** A directed RTL fixture and runner bundle comparing bus and cache-to-IF observations against independent RVFI trap/retirement and exception-CSR checks. Three whole-core cases include a matched no-error control: the warm speculative error does not trap; the cold demanded miss does.
 
-### [Comparator Atlas](https://github.com/sscs-ose/sscs-ose-code-a-chip.github.io/pull/195) (open submission PR)
+[Source and raw results](https://github.com/WLHsu0827/ibex-fetch-error-observability) · [Replay guide](https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/main/REPRODUCE.md) · [Verification record](https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/main/VERIFICATION.md)
 
-A SKY130 comparator notebook with nominal schematic and extracted-RC SPICE simulations across a documented 45-condition PVT grid. [Notebook](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/wlhsu0827-comparator-atlas-isscc27/ISSCC27/submitted_notebooks/comparator_atlas/Comparator_Atlas.ipynb) · [Entry README](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/wlhsu0827-comparator-atlas-isscc27/ISSCC27/submitted_notebooks/comparator_atlas/README.md) · [Reproduction instructions](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/wlhsu0827-comparator-atlas-isscc27/ISSCC27/submitted_notebooks/comparator_atlas/REPRODUCIBILITY.md).
+This is an engineering reproduction of [known Ibex behavior](https://github.com/lowRISC/ibex/issues/1451), not a novel bug or paper. Two agent-executed recordings used isolated checkouts on the same Ubuntu 24.04 WSL host; byte-level replay differences are documented in the evidence index.
 
-The PR is open and unmerged, not an accepted publication or a silicon result. Extracted-model physical fidelity remains unqualified, and a fresh full-grid replay through the clean reproduction entrypoint has not been performed.
+### [Comparator Atlas: When Calibration Is Not Enough](https://github.com/sscs-ose/sscs-ose-code-a-chip.github.io/pull/195)
 
-My working principle: pin sources and tools, document controls, share inspectable evidence, and state what the results do not establish.
+**Question:** Does offset calibration produce a correct decision before the deadline?
+
+**Contribution:** A SKY130 StrongARM comparator notebook comparing schematic design/calibration choices, plus a separate nominal schematic/archived extracted-RC SPICE study across 45 process-voltage-temperature conditions. Saved waveforms distinguish wrong decisions from unresolved ones; sampled specification maps expose timing/energy trade-offs.
+
+[Notebook](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/wlhsu0827-comparator-atlas-isscc27/ISSCC27/submitted_notebooks/comparator_atlas/Comparator_Atlas.ipynb) · [Project overview](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/wlhsu0827-comparator-atlas-isscc27/ISSCC27/submitted_notebooks/comparator_atlas/README.md) · [Replay modes](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/wlhsu0827-comparator-atlas-isscc27/ISSCC27/submitted_notebooks/comparator_atlas/REPRODUCIBILITY.md)
+
+**Status checked 2026-10-01:** Code-a-Chip submission PR open and unmerged, not an accepted publication or silicon result. Extracted-model physical fidelity remains unqualified; a fresh full-grid replay through the clean entrypoint has not been performed.
+
+## How I present evidence
+
+Pin sources and tools, separate controls from faulted cases, and distinguish recorded-data analysis from fresh execution. GitHub Copilot assisted implementation, experiment automation, and documentation; project licenses and third-party attribution are linked in the [evidence index](RESEARCH.md).
 
 **Contact:** [GitHub profile](https://github.com/WLHsu0827).
