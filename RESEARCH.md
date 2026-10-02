@@ -2,7 +2,7 @@
 
 [Profile overview](README.md)
 
-Original public evidence checked **2026-10-01**; hosted Ibex upgrade checked **2026-10-02**. Links below pin the inspected source snapshots; the profile links to the projects' current entrypoints. These are experiment artifacts, not claims of an accepted paper.
+Original public evidence checked **2026-10-01**; hosted Ibex upgrade and standalone monitor checked **2026-10-02**. Links below pin the inspected source snapshots; the profile links to the projects' current entrypoints. These are experiment artifacts, not claims of an accepted paper.
 
 ## Ibex: observe the architectural consequence, not just the bus error
 
@@ -43,6 +43,37 @@ Cache replay JSON is byte-identical. Whole-core compiled binary hashes and JSON 
 
 This closes the fresh automated host/tool-installation gap for the **same three directed cases per suite**, not added statistical trials. It is not independent human/end-user validation, research-independent replication, or an empty-OS installation test. The original WSL evidence above remains a distinct record.
 
+## Standalone trace monitor: reset and process outcomes
+
+**Question and engineering contribution:** Can logging before reset or accepting any fatal-looking output turn an invalid trace into a pass? A reset-armed SystemVerilog observer suppresses rows before/during reset and rejects reset after measurement starts. Its checker enforces consecutive cycles, row widths, event counts, and controlled phase/order associations; its process runner distinguishes exits, signals, timeouts, and tool/spawn failures.
+
+**Status checked 2026-10-02:** [WLHsu0827/ibex-fetch-error-observability#2][monitor-pr] is open and unmerged. [Final-head CI][monitor-ci] completed successfully on Ubuntu 24.04 with Verilator 5.020-1, including offline contracts and real standalone module/fixture execution at [`fdeedd7`][monitor-snapshot]. This separate owner-branch artifact is not in `main` and is not part of the known [lowRISC/ibex#1451](https://github.com/lowRISC/ibex/issues/1451) whole-core/cache experiment above.
+
+| Inspect | Direct evidence |
+| --- | --- |
+| Instrument, checker, and process contract | [Observer module][monitor-observer], [trace checker][monitor-checker], [typed runner][monitor-runner], [source manifest][monitor-sources] |
+| Replay entrypoint | [Module guide, licensing, and attribution][monitor-guide], [completed final-head CI][monitor-ci] |
+| Corrected permanent proof | [Raw-byte manifest][monitor-proof-manifest], [case summary][monitor-proof-summary], [retained outputs][monitor-proof], [archived input run][monitor-proof-run] |
+| Preserved earlier limitation | [First archive: timeout-only live hang evidence][monitor-first-proof] |
+
+From a checkout of the pinned owner-PR source, at the repository root, run **offline Python 3.12 standard-library contracts** without RTL compilation:
+
+```sh
+python -B -m monitor.run_all --mode offline
+```
+
+Or run **real Linux module/fixture replay**, requiring Verilator 5.020 and a C++ compiler:
+
+```sh
+python -B -m monitor.run_all --mode real --output monitor-output
+```
+
+**Archive identity and observed outcomes:** Corrected run `36953631262` executed source commit `273ac718b6d401e32650a4bf08dcf429537a6b72`, distinct from archive publication `fdeedd7`. The later final-head CI is a separate execution, not a replacement for those archived outputs. Four positive reset shapes (initial-low, delayed, held, and asynchronous) each produce `Q [0, 1]` and one `B`/`PRE`/`POST`/`R` with checked phase/order associations. No-reset empty trace and the fresh unarmed `Q [0, 1, 0, 1]` counterexample are rejected.
+
+Repeated reset terminates as `signaled:6` with the intended diagnostic. The corrected live hang captures exactly `TRACE_MONITOR_RESET_AFTER_START\n` but remains `timeout:124`, with `reset_diagnostic_captured: true` and `expected_fatal: false`. The first archive (`36952633401`) retains empty live hang stdout: timeout rejection was demonstrated there, **not** marker capture. That record is preserved, not reconstructed.
+
+**Scope:** Instruction bits and control signals are opaque synthetic labels, not ISA execution, CPU coverage, an architectural oracle, qualified RVFI integration, or a full Ibex bind. This is a bounded engineering artifact, not a confirmed Ibex bug, general error rate, new research method/paper, or independent human replication. No binaries, waveforms, or private CPU data are published; the guide retains Apache-2.0 licensing and Copilot assistance attribution.
+
 ## Comparator Atlas: separate correctness from meeting the deadline
 
 **Question and method:** Compare schematic comparator designs under the same local calibration policy, then evaluate a separate nominal, code-zero schematic/archived RC study across 45 PVT conditions. Decisions use complementary output thresholds and input polarity; a wrong decision and an unresolved deadline are different outcomes. Sampled specification maps select by mean core energy only after the included inputs meet the deadline.
@@ -81,6 +112,19 @@ Snapshot: [`798f498`](https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.i
 [ibex-hosted-success-run]: https://github.com/WLHsu0827/ibex-fetch-error-observability/actions/runs/36887152817
 [ibex-hosted-failure]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/45005691491e298cdf087d07ba8806f648b9c047/verification/hosted/run-36885980667/manifest.json
 [ibex-hosted-failure-run]: https://github.com/WLHsu0827/ibex-fetch-error-observability/actions/runs/36885980667
+[monitor-pr]: https://github.com/WLHsu0827/ibex-fetch-error-observability/pull/2
+[monitor-snapshot]: https://github.com/WLHsu0827/ibex-fetch-error-observability/commit/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48
+[monitor-observer]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/trace_phase_observer.sv
+[monitor-checker]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/trace_check.py
+[monitor-runner]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/process_runner.py
+[monitor-sources]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/SOURCE_MANIFEST.json
+[monitor-guide]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/README.md
+[monitor-ci]: https://github.com/WLHsu0827/ibex-fetch-error-observability/actions/runs/36953848473
+[monitor-proof-manifest]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/evidence/run-36953631262/RAW_MANIFEST.json
+[monitor-proof-summary]: https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/evidence/run-36953631262/summary.json
+[monitor-proof]: https://github.com/WLHsu0827/ibex-fetch-error-observability/tree/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/evidence/run-36953631262
+[monitor-proof-run]: https://github.com/WLHsu0827/ibex-fetch-error-observability/actions/runs/36953631262
+[monitor-first-proof]: https://github.com/WLHsu0827/ibex-fetch-error-observability/tree/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/evidence/run-36952633401
 [atlas-notebook]: https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/798f49838947a7d65e343d4325b72d1cd303b88a/ISSCC27/submitted_notebooks/comparator_atlas/Comparator_Atlas.ipynb
 [atlas-tour]: https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/798f49838947a7d65e343d4325b72d1cd303b88a/ISSCC27/submitted_notebooks/comparator_atlas/REVIEWER_GUIDE.md
 [atlas-measurements]: https://github.com/WLHsu0827/sscs-ose-code-a-chip.github.io/blob/798f49838947a7d65e343d4325b72d1cd303b88a/ISSCC27/submitted_notebooks/comparator_atlas/results/study/verified_measurements.csv

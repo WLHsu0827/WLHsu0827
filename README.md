@@ -20,6 +20,16 @@ This is an engineering reproduction of [known Ibex behavior](https://github.com/
 
 **Automated hosted replay:** A [successful GitHub Actions run](https://github.com/WLHsu0827/ibex-fetch-error-observability/actions/runs/36889109686) passed fresh Ubuntu RTL replay (cache 3/3, whole-core 3/3), default-off lint, strict comparison, and package audit after tool installation. The upgrade is in [WLHsu0827/ibex-fetch-error-observability#1](https://github.com/WLHsu0827/ibex-fetch-error-observability/pull/1), **open and unmerged as checked 2026-10-02**. [Persistent proof and replay limits](RESEARCH.md#automated-hosted-replay-separate-from-the-wsl-record) distinguish this new automated host from the original WSL records and human validation.
 
+### [Reset-armed trace phase monitor](https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/README.md)
+
+**Question:** Can reset and process failures make a trace misleading?
+
+**Contribution:** A standalone SystemVerilog observer, strict phase/order checker, and typed process runner that distinguish valid traces, intended fatal termination, and timeouts. Synthetic fixtures only, not CPU/ISA verification or qualified RVFI integration.
+
+[Source and replay guide](https://github.com/WLHsu0827/ibex-fetch-error-observability/blob/fdeedd7b0c0a7b0108d6b1fdbaecdc7056164b48/monitor/README.md) · [Successful hosted check](https://github.com/WLHsu0827/ibex-fetch-error-observability/actions/runs/36953848473) · [Permanent proof and limits](RESEARCH.md#standalone-trace-monitor-reset-and-process-outcomes)
+
+**Status checked 2026-10-02:** [WLHsu0827/ibex-fetch-error-observability#2](https://github.com/WLHsu0827/ibex-fetch-error-observability/pull/2) is open and unmerged; the monitor is in the owner PR branch, not the default branch.
+
 ### [Comparator Atlas: When Calibration Is Not Enough](https://github.com/sscs-ose/sscs-ose-code-a-chip.github.io/pull/195)
 
 **Question:** Does offset calibration produce a correct decision before the deadline?
